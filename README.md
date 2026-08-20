@@ -3,21 +3,29 @@ About fastlowess-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/fastlowess-feedstock/blob/main/LICENSE.txt)
 
-Home: <https://github.com/thisisamirv/lowess-project>
+Home: https://github.com/thisisamirv/lowess-project
 
 Package license: MIT AND Apache-2.0
 
 Summary: High-performance LOWESS smoothing
 
-* `fastlowess`: python binding
-* `r-rfastlowess`: R binding
-* `fastlowesslib`: C++ binding
+Documentation: https://lowess.readthedocs.io/
+
+The fastest, most robust, and most feature-complete language-agnostic LOWESS (Locally Weighted Scatterplot Smoothing) implementation.
 
 Current build status
 ====================
 
-<table>
 
+<table><tr>
+    <td>GitHub Actions</td>
+    <td>
+      <a href="https://github.com/conda-forge/fastlowess-feedstock/actions/workflows/conda-build.yml">
+        <img src="https://github.com/conda-forge/fastlowess-feedstock/actions/workflows/conda-build.yml/badge.svg?event=push&branch=main">
+      </a>
+    </td>
+  </tr>
+    
   <tr>
     <td>Azure</td>
     <td>
@@ -30,87 +38,10 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
-              <td>linux_64_python3.10.____cpython</td>
+              <td>osx_64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_python3.10.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>linux_64_python3.11.____cpython</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_python3.11.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>linux_64_python3.12.____cpython</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_python3.12.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>linux_64_python3.13.____cp313</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_python3.13.____cp313" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_64_python3.10.____cpython</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_python3.10.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_64_python3.11.____cpython</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_python3.11.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_64_python3.12.____cpython</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_python3.12.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_64_python3.13.____cp313</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_python3.13.____cp313" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>win_64_python3.10.____cpython</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=win&configuration=win%20win_64_python3.10.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>win_64_python3.11.____cpython</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=win&configuration=win%20win_64_python3.11.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>win_64_python3.12.____cpython</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=win&configuration=win%20win_64_python3.12.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>win_64_python3.13.____cp313</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=win&configuration=win%20win_64_python3.13.____cp313" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
                 </a>
               </td>
             </tr>
@@ -128,43 +59,99 @@ Current release info
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-fastlowess-green.svg)](https://anaconda.org/conda-forge/fastlowess) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/fastlowess.svg)](https://anaconda.org/conda-forge/fastlowess) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/fastlowess.svg)](https://anaconda.org/conda-forge/fastlowess) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/fastlowess.svg)](https://anaconda.org/conda-forge/fastlowess) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libfastlowess-green.svg)](https://anaconda.org/conda-forge/libfastlowess) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libfastlowess.svg)](https://anaconda.org/conda-forge/libfastlowess) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libfastlowess.svg)](https://anaconda.org/conda-forge/libfastlowess) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libfastlowess.svg)](https://anaconda.org/conda-forge/libfastlowess) |
-| [![Conda Recipe](https://img.shields.io/badge/recipe-rfastlowess-green.svg)](https://anaconda.org/conda-forge/r-rfastlowess) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/r-rfastlowess.svg)](https://anaconda.org/conda-forge/r-rfastlowess) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/r-rfastlowess.svg)](https://anaconda.org/conda-forge/r-rfastlowess) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/r-rfastlowess.svg)](https://anaconda.org/conda-forge/r-rfastlowess) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-r--rfastlowess-green.svg)](https://anaconda.org/conda-forge/r-rfastlowess) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/r-rfastlowess.svg)](https://anaconda.org/conda-forge/r-rfastlowess) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/r-rfastlowess.svg)](https://anaconda.org/conda-forge/r-rfastlowess) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/r-rfastlowess.svg)](https://anaconda.org/conda-forge/r-rfastlowess) |
 
-Installing
-==========
+Installing fastlowess
+=====================
 
-Installing from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `fastlowess` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
 
 ```
 conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, the package can be installed with `conda`:
+How to use
+----------
+
+<details>
+<summary>With conda</summary>
 
 ```
-# Python
-conda install fastlowess
-
-# R
-conda install r-rfastlowess
-
-# C++
-conda install libfastlowess
+conda install fastlowess libfastlowess r-rfastlowess
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
-# Python
-mamba install fastlowess
-
-# R
-mamba install r-rfastlowess
-
-# C++
-mamba install libfastlowess
+mamba install fastlowess libfastlowess r-rfastlowess
 ```
+
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+# for adding to your local project
+pixi add fastlowess libfastlowess r-rfastlowess
+# for installing globally
+pixi global install fastlowess libfastlowess r-rfastlowess
+```
+
+</details>
+
+Search package versions
+-----------------------
+
+It is possible to list all of the versions of `fastlowess` available on your platform:
+
+<details>
+<summary>With conda</summary>
+
+```
+conda search fastlowess --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With mamba</summary>
+
+```
+mamba search fastlowess --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+pixi search fastlowess --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With mamba repoquery, which may provide more information</summary>
+
+```
+# Search all versions available on your platform:
+mamba repoquery search fastlowess --channel conda-forge
+
+# List packages depending on `fastlowess`:
+mamba repoquery whoneeds fastlowess --channel conda-forge
+
+# List dependencies of `fastlowess`:
+mamba repoquery depends fastlowess --channel conda-forge
+```
+
+</details>
+
 
 About conda-forge
 =================
@@ -206,6 +193,7 @@ Terminology
 **conda-forge** - the place where the feedstock and smithy live and work to
                   produce the finished article (built conda distributions)
 
+
 Updating fastlowess-feedstock
 =============================
 
@@ -222,10 +210,9 @@ on branches in forks, and branches in the main repository should only be used to
 build distinct package versions.
 
 In order to produce a uniquely identifiable distribution:
-
-* If the version of a package **is not** being increased, please add or increase
+ * If the version of a package **is not** being increased, please add or increase
    the [``build/number``](https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#build-number-and-string).
-* If the version of a package **is** being increased, please remember to return
+ * If the version of a package **is** being increased, please remember to return
    the [``build/number``](https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#build-number-and-string)
    back to 0.
 
@@ -233,3 +220,4 @@ Feedstock Maintainers
 =====================
 
 * [@thisisamirv](https://github.com/thisisamirv/)
+

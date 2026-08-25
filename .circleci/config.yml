@@ -2,7 +2,7 @@
 # update the conda-forge.yml and/or the recipe/meta.yaml.
 # -*- mode: jinja-yaml -*-
 
-version: 2.1
+version: 2
 
 jobs:
   build:

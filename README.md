@@ -1,21 +1,23 @@
-<!-- markdownlint-disable MD013 MD025 MD033 MD040 MD045 -->
 About fastlowess-feedstock
 ==========================
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/fastlowess-feedstock/blob/main/LICENSE.txt)
 
-Home: <https://github.com/thisisamirv/lowess-project>
+Home: https://github.com/thisisamirv/lowess-project
 
 Package license: MIT AND Apache-2.0
 
 Summary: High-performance LOWESS smoothing
 
-Documentation: <https://lowess.readthedocs.io/>
+Development: https://github.com/thisisamirv/lowess-project
+
+Documentation: https://lowess.readthedocs.io/
 
 The fastest, most robust, and most feature-complete language-agnostic LOWESS (Locally Weighted Scatterplot Smoothing) implementation.
 
 Current build status
 ====================
+
 
 <table><tr>
     <td>GitHub Actions</td>
@@ -25,7 +27,7 @@ Current build status
       </a>
     </td>
   </tr>
-
+    
   <tr>
     <td>Azure</td>
     <td>
@@ -38,38 +40,10 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
-              <td>osx_64_python3.10.____cpython</td>
+              <td>osx_64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_python3.10.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_64_python3.11.____cpython</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_python3.11.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_64_python3.12.____cpython</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_python3.12.____cpython" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_64_python3.13.____cp313</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_python3.13.____cp313" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>osx_64_python3.14.____cp314</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=27084&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_python3.14.____cp314" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/fastlowess-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
                 </a>
               </td>
             </tr>
@@ -180,6 +154,7 @@ mamba repoquery depends fastlowess --channel conda-forge
 
 </details>
 
+
 About conda-forge
 =================
 
@@ -220,6 +195,7 @@ Terminology
 **conda-forge** - the place where the feedstock and smithy live and work to
                   produce the finished article (built conda distributions)
 
+
 Updating fastlowess-feedstock
 =============================
 
@@ -236,10 +212,9 @@ on branches in forks, and branches in the main repository should only be used to
 build distinct package versions.
 
 In order to produce a uniquely identifiable distribution:
-
-* If the version of a package **is not** being increased, please add or increase
+ * If the version of a package **is not** being increased, please add or increase
    the [``build/number``](https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#build-number-and-string).
-* If the version of a package **is** being increased, please remember to return
+ * If the version of a package **is** being increased, please remember to return
    the [``build/number``](https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#build-number-and-string)
    back to 0.
 
@@ -247,3 +222,4 @@ Feedstock Maintainers
 =====================
 
 * [@thisisamirv](https://github.com/thisisamirv/)
+

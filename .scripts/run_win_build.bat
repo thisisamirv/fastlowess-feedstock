@@ -30,8 +30,8 @@ if !errorlevel! neq 0 exit /b !errorlevel!
 
 echo Creating environment
 call "%MICROMAMBA_EXE%" create --yes --root-prefix "%MAMBA_ROOT_PREFIX%" --prefix "%MINIFORGE_HOME%" ^
---channel conda-forge ^
-pip rattler-build conda-forge-ci-setup=4 "conda-build>=26.3"
+    --channel conda-forge ^
+    pip rattler-build conda-forge-ci-setup=4 "conda-build>=26.3"
 if !errorlevel! neq 0 exit /b !errorlevel!
 echo Removing %MAMBA_ROOT_PREFIX%
 del /S /Q "%MAMBA_ROOT_PREFIX%" >nul
@@ -55,15 +55,16 @@ if !errorlevel! neq 0 exit /b !errorlevel!
 echo Running build setup
 CALL run_conda_forge_build_setup
 
+
 if !errorlevel! neq 0 exit /b !errorlevel!
 
 if EXIST LICENSE.txt (
-  echo Copying feedstock license
-  copy LICENSE.txt "recipe\\recipe-scripts-license.txt"
+    echo Copying feedstock license
+    copy LICENSE.txt "recipe\\recipe-scripts-license.txt"
 )
 
 if NOT [%flow_run_id%] == [] (
-  set "EXTRA_CB_OPTIONS=%EXTRA_CB_OPTIONS% --extra-meta flow_run_id=%flow_run_id% --extra-meta remote_url=%remote_url% --extra-meta sha=%sha%"
+        set "EXTRA_CB_OPTIONS=%EXTRA_CB_OPTIONS% --extra-meta flow_run_id=%flow_run_id% --extra-meta remote_url=%remote_url% --extra-meta sha=%sha%"
 )
 
 call :end_group
@@ -80,24 +81,24 @@ call :end_group
 
 :: Prepare some environment variables for the upload step
 if /i "%CI%" == "github_actions" (
-  set "FEEDSTOCK_NAME=%GITHUB_REPOSITORY:*/=%"
-  set "GIT_BRANCH=%GITHUB_REF_NAME%"
-  if /i "%GITHUB_EVENT_NAME%" == "pull_request" (
-    set "IS_PR_BUILD=True"
+    set "FEEDSTOCK_NAME=%GITHUB_REPOSITORY:*/=%"
+    set "GIT_BRANCH=%GITHUB_REF_NAME%"
+    if /i "%GITHUB_EVENT_NAME%" == "pull_request" (
+        set "IS_PR_BUILD=True"
     ) else (
-    set "IS_PR_BUILD=False"
-  )
-  set "TEMP=%RUNNER_TEMP%"
+        set "IS_PR_BUILD=False"
+    )
+    set "TEMP=%RUNNER_TEMP%"
 )
 if /i "%CI%" == "azure" (
-  set "FEEDSTOCK_NAME=%BUILD_REPOSITORY_NAME:*/=%"
-  set "GIT_BRANCH=%BUILD_SOURCEBRANCHNAME%"
-  if /i "%BUILD_REASON%" == "PullRequest" (
-    set "IS_PR_BUILD=True"
+    set "FEEDSTOCK_NAME=%BUILD_REPOSITORY_NAME:*/=%"
+    set "GIT_BRANCH=%BUILD_SOURCEBRANCHNAME%"
+    if /i "%BUILD_REASON%" == "PullRequest" (
+        set "IS_PR_BUILD=True"
     ) else (
-    set "IS_PR_BUILD=False"
-  )
-  set "TEMP=%UPLOAD_TEMP%"
+        set "IS_PR_BUILD=False"
+    )
+    set "TEMP=%UPLOAD_TEMP%"
 )
 
 :: Validate
@@ -107,14 +108,14 @@ if !errorlevel! neq 0 exit /b !errorlevel!
 call :end_group
 
 if /i "%UPLOAD_PACKAGES%" == "true" (
-  if /i "%IS_PR_BUILD%" == "false" (
-    call :start_group "Uploading packages"
-    if not exist "%TEMP%\" md "%TEMP%"
-    set "TMP=%TEMP%"
-    upload_package --validate --feedstock-name="%FEEDSTOCK_NAME%" .\ ".\recipe" .ci_support\%CONFIG%.yaml
-    if !errorlevel! neq 0 exit /b !errorlevel!
-    call :end_group
-  )
+    if /i "%IS_PR_BUILD%" == "false" (
+        call :start_group "Uploading packages"
+        if not exist "%TEMP%\" md "%TEMP%"
+        set "TMP=%TEMP%"
+        upload_package --validate --feedstock-name="%FEEDSTOCK_NAME%" .\ ".\recipe" .ci_support\%CONFIG%.yaml
+        if !errorlevel! neq 0 exit /b !errorlevel!
+        call :end_group
+    )
 )
 
 exit
@@ -123,23 +124,23 @@ exit
 
 :start_group
 if /i "%CI%" == "github_actions" (
-  echo ::group::%~1
-  exit /b
+    echo ::group::%~1
+    exit /b
 )
 if /i "%CI%" == "azure" (
-  echo ##[group]%~1
-  exit /b
+    echo ##[group]%~1
+    exit /b
 )
 echo %~1
 exit /b
 
 :end_group
 if /i "%CI%" == "github_actions" (
-  echo ::endgroup::
-  exit /b
+    echo ::endgroup::
+    exit /b
 )
 if /i "%CI%" == "azure" (
-  echo ##[endgroup]
-  exit /b
+    echo ##[endgroup]
+    exit /b
 )
 exit /b

@@ -42,7 +42,7 @@ outputs:
         - if: win
           then:
             - cd bindings\r
-            - cd src && tar --extract --xz -f vendor.tar.xz && cd ..
+            - cd src && tar --extract --xz -v -f vendor.tar.xz && cd ..
             - set "CARGO_BUILD_TARGET=" && R CMD INSTALL --build .
     requirements:
       build:

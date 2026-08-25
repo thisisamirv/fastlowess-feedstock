@@ -24,8 +24,9 @@ outputs:
   # Windows: Conda's Rust host toolchain is MSVC by default, but Conda R on
   # Windows is built with MinGW-w64 (GNU ABI). Makevars.win already targets
   # x86_64-pc-windows-gnu, so we add the GNU std lib + m2w64 linker toolchain
-  # so cargo can cross-compile to match Conda R's ABI. Experimental: may need
-  # further CI iteration.
+  # so cargo can cross-compile to match Conda R's ABI. LIBRARY_PATH points at
+  # m2w64-sysroot_win-64's nested CRT dir since m2w64-gcc's built-in search
+  # paths don't cover that layout.
   # ----------------------------------------------------------------------------
   - package:
       name: r-rfastlowess

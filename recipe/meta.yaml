@@ -63,9 +63,9 @@ outputs:
         - rust_std_x86_64-pc-windows-gnu  # [win]
         - m2w64-toolchain  # [win]
       host:
-        - r-base >=4.4
+        - r-base >=4.6
       run:
-        - r-base >=4.4
+        - r-base >=4.6
     test:
       commands:
         - $R -e "library('rfastlowess')"

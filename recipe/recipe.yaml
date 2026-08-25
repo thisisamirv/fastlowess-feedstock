@@ -54,6 +54,7 @@ outputs:
             - rust-std-x86_64-pc-windows-gnu
             - m2w64-toolchain
             - xz
+            - make
       host:
         - r-base >=4.4
       run:

@@ -43,7 +43,7 @@ outputs:
           then:
             - cd bindings\r
             - cd src && xz -d -f vendor.tar.xz && tar --extract -f vendor.tar && cd ..
-            - set "CARGO_BUILD_TARGET=" && R CMD INSTALL --build .
+            - set "LIBRARY_PATH=%PREFIX%\Library\x86_64-w64-mingw32\sysroot\usr\lib" && set "CARGO_BUILD_TARGET=" && R CMD INSTALL --build .
     requirements:
       build:
         - ${{ compiler('c') }}

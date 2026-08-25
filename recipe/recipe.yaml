@@ -53,7 +53,7 @@ outputs:
           then:
             - rust-std-x86_64-pc-windows-gnu
             - m2w64-toolchain
-            - m2w64-sysroot
+            - m2w64-sysroot_win-64
             - xz
             - make
       host:

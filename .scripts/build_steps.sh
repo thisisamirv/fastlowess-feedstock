@@ -11,10 +11,9 @@ set -xeuo pipefail
 export FEEDSTOCK_ROOT="${FEEDSTOCK_ROOT:-/home/conda/feedstock_root}"
 source ${FEEDSTOCK_ROOT}/.scripts/logging_utils.sh
 
+(endgroup "Start Docker") 2>/dev/null
 
-( endgroup "Start Docker" ) 2> /dev/null
-
-( startgroup "Configuring conda" ) 2> /dev/null
+(startgroup "Configuring conda") 2>/dev/null
 
 export PYTHONUNBUFFERED=1
 export RECIPE_ROOT="${RECIPE_ROOT:-/home/conda/recipe_root}"
@@ -33,10 +32,10 @@ solver: libmamba
 
 CONDARC
 mv /opt/conda/conda-meta/history /opt/conda/conda-meta/history.$(date +%Y-%m-%d-%H-%M-%S)
-echo > /opt/conda/conda-meta/history
+echo >/opt/conda/conda-meta/history
 micromamba install --root-prefix ~/.conda --prefix /opt/conda \
-    --yes --override-channels --channel conda-forge --strict-channel-priority \
-    pip  python=3.12 conda-build conda-forge-ci-setup=4 "conda-build>=26.3"
+	--yes --override-channels --channel conda-forge --strict-channel-priority \
+	pip rattler-build conda-forge-ci-setup=4 "conda-build>=26.3"
 export CONDA_LIBMAMBA_SOLVER_NO_CHANNELS_FROM_INSTALLED=1
 
 # set up the condarc
@@ -44,70 +43,70 @@ setup_conda_rc "${FEEDSTOCK_ROOT}" "${RECIPE_ROOT}" "${CONFIG_FILE}"
 
 source run_conda_forge_build_setup
 
-
-
 # make the build number clobber
 make_build_number "${FEEDSTOCK_ROOT}" "${RECIPE_ROOT}" "${CONFIG_FILE}"
 
-
-
-( endgroup "Configuring conda" ) 2> /dev/null
+(endgroup "Configuring conda") 2>/dev/null
 
 if [[ -f "${FEEDSTOCK_ROOT}/LICENSE.txt" ]]; then
-  cp "${FEEDSTOCK_ROOT}/LICENSE.txt" "${RECIPE_ROOT}/recipe-scripts-license.txt"
+	cp "${FEEDSTOCK_ROOT}/LICENSE.txt" "${RECIPE_ROOT}/recipe-scripts-license.txt"
 fi
 
 if [[ "${BUILD_WITH_CONDA_DEBUG:-0}" == 1 ]]; then
-    # differences between conda-build vs. rattler-build
-    #   - 1 step (conda debug + manually open shell) vs. 2 step (rb debug {setup, shell})
-    #   - recipe is positional vs. --recipe "${RECIPE_ROOT}"
-    #   - --output-id vs. --output-name
-    #   - --clobber-file vs. none
-    #   - none vs. --target-platform
-    CONDA_SUBDIR="${BUILD_PLATFORM}" conda debug \
-        "${RECIPE_ROOT}" \
-        -m "${CI_SUPPORT}/${CONFIG}.yaml" \
-        ${EXTRA_CB_OPTIONS:-} \
-        ${BUILD_OUTPUT_ID:+--output-id "${BUILD_OUTPUT_ID}"} \
-        --clobber-file "${CI_SUPPORT}/clobber_${CONFIG}.yaml"
+	# differences between conda-build vs. rattler-build
+	#   - 1 step (conda debug + manually open shell) vs. 2 step (rb debug {setup, shell})
+	#   - recipe is positional vs. --recipe "${RECIPE_ROOT}"
+	#   - --output-id vs. --output-name
+	#   - --clobber-file vs. none
+	#   - none vs. --target-platform
+	export CONDA_BLD_PATH="${CONDA_BLD_PATH:-${FEEDSTOCK_ROOT}/build_artifacts}"
+	rattler-build debug setup \
+		--recipe "${RECIPE_ROOT}" \
+		-m "${CI_SUPPORT}/${CONFIG}.yaml" \
+		${EXTRA_CB_OPTIONS:-} \
+		${BUILD_OUTPUT_ID:+--output-name "${BUILD_OUTPUT_ID}"} \
+		--build-platform "${BUILD_PLATFORM}" \
+		--target-platform "${HOST_PLATFORM}"
 
-    # Drop into an interactive shell
-    /bin/bash
+	rattler-build debug shell
 else
-    # differences between conda-build vs. rattler-build
-    #   - recipe is positional vs. --recipe "${RECIPE_ROOT}"
-    #   - --suppress-variables vs. none
-    #   - --clobber-file vs. none
-    #   - none vs. --target-platform
-    #   - --extra-meta a=b c=d vs. --extra-meta a=b --extra-meta c=d
-    CONDA_SUBDIR="${BUILD_PLATFORM}" conda-build \
-        "${RECIPE_ROOT}" \
-        -m "${CI_SUPPORT}/${CONFIG}.yaml" \
-        ${EXTRA_CB_OPTIONS:-} \
-        --suppress-variables \
-        --clobber-file "${CI_SUPPORT}/clobber_${CONFIG}.yaml" \
-        --extra-meta flow_run_id="${flow_run_id:-}" remote_url="${remote_url:-}" sha="${sha:-}"
-    ( startgroup "Inspecting artifacts" ) 2> /dev/null
+	# differences between conda-build vs. rattler-build
+	#   - recipe is positional vs. --recipe "${RECIPE_ROOT}"
+	#   - --suppress-variables vs. none
+	#   - --clobber-file vs. none
+	#   - none vs. --target-platform
+	#   - --extra-meta a=b c=d vs. --extra-meta a=b --extra-meta c=d
 
-    # inspect_artifacts was only added in conda-forge-ci-setup 4.9.4
-    command -v inspect_artifacts >/dev/null 2>&1 && inspect_artifacts --recipe-dir "${RECIPE_ROOT}" -m "${CONFIG_FILE}" || echo "inspect_artifacts needs conda-forge-ci-setup >=4.9.4"
+	rattler-build build \
+		--recipe "${RECIPE_ROOT}" \
+		-m "${CI_SUPPORT}/${CONFIG}.yaml" \
+		${EXTRA_CB_OPTIONS:-} \
+		--build-platform "${BUILD_PLATFORM}" \
+		--target-platform "${HOST_PLATFORM}" \
+		--extra-meta flow_run_id="${flow_run_id:-}" \
+		--extra-meta remote_url="${remote_url:-}" \
+		--extra-meta sha="${sha:-}"
+	(startgroup "Inspecting artifacts") 2>/dev/null
 
-    ( endgroup "Inspecting artifacts" ) 2> /dev/null
-    ( startgroup "Validating outputs" ) 2> /dev/null
+	# inspect_artifacts was only added in conda-forge-ci-setup 4.9.4
+	command -v inspect_artifacts >/dev/null 2>&1 && inspect_artifacts --recipe-dir "${RECIPE_ROOT}" -m "${CONFIG_FILE}" || echo "inspect_artifacts needs conda-forge-ci-setup >=4.9.4"
 
-    validate_recipe_outputs "${FEEDSTOCK_NAME}"
+	(endgroup "Inspecting artifacts") 2>/dev/null
+	(startgroup "Validating outputs") 2>/dev/null
 
-    ( endgroup "Validating outputs" ) 2> /dev/null
+	validate_recipe_outputs "${FEEDSTOCK_NAME}"
 
-    ( startgroup "Uploading packages" ) 2> /dev/null
+	(endgroup "Validating outputs") 2>/dev/null
 
-    if [[ "${UPLOAD_PACKAGES}" != "False" ]] && [[ "${IS_PR_BUILD}" == "False" ]]; then
-        upload_package --validate --feedstock-name="${FEEDSTOCK_NAME}"  "${FEEDSTOCK_ROOT}" "${RECIPE_ROOT}" "${CONFIG_FILE}"
-    fi
+	(startgroup "Uploading packages") 2>/dev/null
 
-    ( endgroup "Uploading packages" ) 2> /dev/null
+	if [[ "${UPLOAD_PACKAGES}" != "False" ]] && [[ "${IS_PR_BUILD}" == "False" ]]; then
+		upload_package --validate --feedstock-name="${FEEDSTOCK_NAME}" "${FEEDSTOCK_ROOT}" "${RECIPE_ROOT}" "${CONFIG_FILE}"
+	fi
+
+	(endgroup "Uploading packages") 2>/dev/null
 fi
 
-( startgroup "Final checks" ) 2> /dev/null
+(startgroup "Final checks") 2>/dev/null
 
 touch "${FEEDSTOCK_ROOT}/build_artifacts/conda-forge-build-done-${CONFIG}"

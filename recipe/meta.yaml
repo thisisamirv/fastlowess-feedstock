@@ -33,12 +33,14 @@ requirements:
 outputs:
   # ----------------------------------------------------------------------------
   # Output 1: R Package (r-rfastlowess)
-  # Note: Skip on Windows because Conda's Rust (MSVC) cannot compile for GNU
-  # target needed by Conda R (MinGW-GCC). Windows users can use Rtools/CRAN.
+  # Windows: Conda's Rust host toolchain is MSVC by default, but Conda R on
+  # Windows is built with MinGW-w64 (GNU ABI). Makevars.win already targets
+  # x86_64-pc-windows-gnu, so we add the GNU std lib + m2w64 linker toolchain
+  # so cargo can cross-compile to match Conda R's ABI. Experimental: may need
+  # further CI iteration.
   # ----------------------------------------------------------------------------
   - name: r-rfastlowess
     build:
-      skip: true  # [win]
       missing_dso_whitelist:
         - "*/libR.so"
       script: |
@@ -50,16 +52,20 @@ outputs:
         # Extract vendored dependencies before R CMD INSTALL runs configure
         cd src && tar --extract --xz -f vendor.tar.xz && cd ..
         # Unset CARGO_BUILD_TARGET to ensure configure and cargo use the same library path
-        unset CARGO_BUILD_TARGET && $R CMD INSTALL --build .
+        unset CARGO_BUILD_TARGET  # [not win]
+        set "CARGO_BUILD_TARGET="  # [win]
+        $R CMD INSTALL --build .
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ stdlib('c') }}
         - {{ compiler('rust') }}
+        - rust_std_x86_64-pc-windows-gnu  # [win]
+        - m2w64-toolchain  # [win]
       host:
-        - r-base >=4.3
+        - r-base >=4.4
       run:
-        - r-base >=4.3
+        - r-base >=4.4
     test:
       commands:
         - $R -e "library('rfastlowess')"

@@ -1,0 +1,176 @@
+context:
+  version: "3.1.0"
+
+# ==============================================================================
+# Source Configuration
+# ==============================================================================
+recipe:
+  name: fastlowess-split
+  version: ${{ version }}
+
+source:
+  url: https://github.com/thisisamirv/lowess-project/archive/v${{ version }}.tar.gz
+  sha256: 610a6af65a3e8eaa5483332c256e7ce6c3fe2b7ac3ec0f04e08ecd70bf6abe0f
+
+build:
+  number: 0
+
+# ==============================================================================
+# Multi-Output Package Definitions (R, Python, C++)
+# ==============================================================================
+outputs:
+  # ----------------------------------------------------------------------------
+  # Output 1: R Package (r-rfastlowess)
+  # Windows: Conda's Rust host toolchain is MSVC by default, but Conda R on
+  # Windows is built with MinGW-w64 (GNU ABI). Makevars.win already targets
+  # x86_64-pc-windows-gnu, so we add the GNU std lib + m2w64 linker toolchain
+  # so cargo can cross-compile to match Conda R's ABI. LIBRARY_PATH points at
+  # m2w64-sysroot_win-64's nested CRT dir since m2w64-gcc's built-in search
+  # paths don't cover that layout.
+  # ----------------------------------------------------------------------------
+  - package:
+      name: r-rfastlowess
+    build:
+      dynamic_linking:
+        missing_dso_allowlist:
+          - "*/libR.so"
+      script:
+        - if: unix
+          then:
+            - cd bindings/r
+            - cd src && tar --extract --xz -f vendor.tar.xz && cd ..
+            - unset CARGO_BUILD_TARGET && R CMD INSTALL --build .
+        - if: win
+          then:
+            - cd bindings\r
+            - cd src && xz -d -f vendor.tar.xz && tar --extract -f vendor.tar && cd ..
+            - set "LIBRARY_PATH=%PREFIX%\Library\x86_64-w64-mingw32\sysroot\usr\lib" && set "CARGO_BUILD_TARGET=" && R CMD INSTALL --build .
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ stdlib('c') }}
+        - ${{ compiler('rust') }}
+        - if: win
+          then:
+            - rust-std-x86_64-pc-windows-gnu
+            - m2w64-toolchain
+            - m2w64-sysroot_win-64
+            - xz-tools
+            - make
+      host:
+        - r-base >=4.4
+      run:
+        - r-base >=4.4
+    tests:
+      - r:
+          libraries:
+            - rfastlowess
+
+  # ----------------------------------------------------------------------------
+  # Output 2: Python Package (fastlowess)
+  # ----------------------------------------------------------------------------
+  - package:
+      name: fastlowess
+    build:
+      skip:
+        - match(python, "<3.8")
+      script:
+        - if: unix
+          then:
+            - cd bindings/python
+            - $PYTHON -m pip install . -vv --no-build-isolation
+            - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+        - if: win
+          then:
+            - cd bindings\python
+            - "%PYTHON% -m pip install . -vv --no-build-isolation"
+            - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ stdlib('c') }}
+        - ${{ compiler('rust') }}
+        - cargo-bundle-licenses
+      host:
+        - python
+        - pip
+        - maturin >=1.0,<2.0
+        - numpy >=1.20
+      run:
+        - python
+        - numpy >=1.20
+    tests:
+      - python:
+          imports:
+            - fastlowess
+          pip_check: true
+
+  # ----------------------------------------------------------------------------
+  # Output 3: C++ Library (libfastlowess)
+  # ----------------------------------------------------------------------------
+  - package:
+      name: libfastlowess
+    build:
+      script:
+        - cd bindings/cpp
+        - if: unix
+          then:
+            # Unset CARGO_BUILD_TARGET so cargo outputs to target/release instead of target/<triple>/release
+            - unset CARGO_BUILD_TARGET && cargo build --release
+        - if: win
+          then:
+            - set "CARGO_BUILD_TARGET=" && cargo build --release
+        - if: unix
+          then:
+            - mkdir -p $PREFIX/lib
+            - mkdir -p $PREFIX/include
+        - if: win
+          then:
+            - if not exist "%PREFIX%\Library\lib" mkdir "%PREFIX%\Library\lib"
+            - if not exist "%PREFIX%\Library\bin" mkdir "%PREFIX%\Library\bin"
+            - if not exist "%PREFIX%\Library\include" mkdir "%PREFIX%\Library\include"
+        - if: linux
+          then:
+            - find ../../target -name "libfastlowess_cpp.so" -type f -exec cp {} $PREFIX/lib/libfastlowess.so \;
+        - if: osx
+          then:
+            - find ../../target -name "libfastlowess_cpp.dylib" -type f -exec cp {} $PREFIX/lib/libfastlowess.dylib \;
+        - if: win
+          then:
+            - copy ..\..\target\release\fastlowess_cpp.dll "%PREFIX%\Library\bin\fastlowess.dll"
+            - copy ..\..\target\release\fastlowess_cpp.dll.lib "%PREFIX%\Library\lib\fastlowess.lib"
+        - if: unix
+          then:
+            - cp include/fastlowess.h $PREFIX/include/
+        - if: win
+          then:
+            - copy include\fastlowess.h "%PREFIX%\Library\include\"
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ stdlib('c') }}
+        - ${{ compiler('rust') }}
+    tests:
+      - package_contents:
+          include:
+            - fastlowess.h
+          lib:
+            - fastlowess
+
+# ==============================================================================
+# Package Metadata & Maintainers
+# ==============================================================================
+about:
+  homepage: https://github.com/thisisamirv/lowess-project
+  license: MIT AND Apache-2.0
+  license_file:
+    - LICENSE-MIT
+    - LICENSE-APACHE
+  summary: High-performance LOWESS smoothing
+  description: The fastest, most robust, and most feature-complete language-agnostic LOWESS (Locally Weighted Scatterplot Smoothing) implementation.
+  documentation: https://lowess.readthedocs.io/
+  repository: https://github.com/thisisamirv/lowess-project
+
+extra:
+  recipe-maintainers:
+    - thisisamirv

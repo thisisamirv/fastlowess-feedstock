@@ -9,6 +9,8 @@ Package license: MIT AND Apache-2.0
 
 Summary: High-performance LOWESS smoothing
 
+Development: https://github.com/thisisamirv/lowess-project
+
 Documentation: https://lowess.readthedocs.io/
 
 The fastest, most robust, and most feature-complete language-agnostic LOWESS (Locally Weighted Scatterplot Smoothing) implementation.

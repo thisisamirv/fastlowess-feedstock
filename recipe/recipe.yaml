@@ -52,8 +52,8 @@ outputs:
         - if: win
           then:
             - rust-std-x86_64-pc-windows-gnu
-            - ${{ compiler('m2w64_c') }}
-            - ${{ stdlib('m2w64_c') }}
+            - m2w64-toolchain
+            - m2w64-sysroot
             - xz
             - make
       host:

@@ -51,7 +51,7 @@ outputs:
         - ${{ compiler('rust') }}
         - if: win
           then:
-            - rust_std_x86_64-pc-windows-gnu
+            - rust-std-x86_64-pc-windows-gnu
             - m2w64-toolchain
       host:
         - r-base >=4.4
